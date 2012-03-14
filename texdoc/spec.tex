@@ -1,0 +1,51 @@
+\documentclass{article}
+
+\usepackage{anysize}
+\usepackage[small,compact]{titlesec}
+\usepackage{titling}
+
+\marginsize{2cm}{2cm}{2cm}{2cm}
+
+\title{CSI4105 Term Project Specification}
+\author{Milosz Kosmider \\ 4933228}
+\setlength{\droptitle}{-50pt}
+
+\begin{document}
+
+\maketitle
+\pagestyle{empty}
+\thispagestyle{empty}
+
+\section{The problem}
+The playing field in a Sudoku puzzle is an $n \times n$ grid of boards. The boards themselves are $n \times n$ grids of cells. Thus, effectively, we have an $n^2 \times n^2$ grid of cells. Let the problem of finding a solution to a partially-completed Sudoku grid be called {\sc Sudoku}. The statement of the problem follows:
+
+An instance $S$ of {\sc Sudoku} is a partially completed Sudoku grid. A solution $s$ for $S$ is either an arrangement of numbers between $1$ and $n^2$ in each remaining cell such that no row, column, or board contains two of the same number; or the lack of a possible such arrangement, which we will call the \textbf{null solution}.
+
+This problem is, in general, $\mathcal{NP}$-complete. As a corollary, the problem of finding all solutions $s$ for any given instance $S$ is also $\mathcal{NP}$-hard, as is the decision problem of determining whether or not a Sudoku grid has a non-null solution.
+
+\section{Solution strategies}
+Since {\sc Sudoku} is an $\mathcal{NP}$-complete problem, an instance $S$ of {\sc Sudoku} can be solved in three steps:
+\begin{enumerate}
+\item Transform $S$ in polynomial time to an instance $X$ of {\sc Problem}, where {\sc Problem} is $\mathcal{NP}$-complete.
+\item Build a polynomial-time transformation $A$ from any solution $x$ for $X$, to a solution $s$ for $S$.
+\item Use a known technique for finding $x$. Then $s = A(x)$ is a solution for $S$.
+\end{enumerate}
+The Wikipedia article about the mathematics of Sudoku suggests that an $n=3$ instance of {\sc Sudoku} should be transformed into an instance of {\sc VertexCover}, so that Donald Knuth's ``Dancing Links'' technique could be used to solve it quickly. Let us then verify this editor's claim by comparing it to a natural approach to solving Sudoku. An intuitive, ``human'' method of solving Sudoku (albeit slightly more deterministic than what a human would do) might be such:
+\begin{enumerate}
+   \item For each empty cell, pencil in every candidate number for that cell given the unicity constraints imposed by the row, column, and board that that the cell is in.
+   \item If any cell has no candidate, declare the null solution.
+   \item For each cell that has one candidate, enter that candidate into that cell.
+   \item Repeat the steps above until all cells have at least two candidates.
+   \item Choose the first cell that has the least number of candidates. For each candidate, copy the board and recurse this algorithm on the copy. If any choice of candidate gives a solved board, it gives a non-null solution. If no candidate gives a solved board, we have the null-solution.
+\end{enumerate}
+A proof of correctness (or a revision of the algorithm!) will feature in the project.
+
+\section{Experimental design}
+Two parameters will be observed when comparing the two techniques above: the RAM requirements and the CPU-time requirements. In favor of theoretical sketches of these numbers, experimental results will be used.
+
+Both algorithms will be implemented in C/C++, compiled, and run under the profiling tool \verb|valgrind| to produce detailed data about RAM usage and CPU-time. For each program, a graph of RAM usage over time, a maximum RAM usage value, and a total CPU-time value will be given. A brief analysis of the results will be provided.
+
+Instructions for using \verb|valgrind| to obtain the desired data are given by a blogger at the following URL: \\
+\noindent \underline{http://blog.kowalczyk.info/article/valgrind-basics-1.html}.
+
+\end{document}

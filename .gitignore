@@ -1,0 +1,9 @@
+.DS_Store
+*.swp
+*.swo
+obj/*
+libsudoku.a
+sudoku
+texdoc/*.log
+texdoc/*.aux
+texdoc/*.pdf
